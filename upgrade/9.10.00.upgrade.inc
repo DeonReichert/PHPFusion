@@ -36,7 +36,7 @@ $insert_settings_tbl = [
 ];
 
 foreach ($insert_settings_tbl as $key => $value) {
-    if (!isset($settings[$key])) {
+    if ( isset($settings[$key])) {
         $inf_insertdbrow[] = DB_SETTINGS." (settings_name, settings_value) VALUES ('$key', '$value')";
     }
 }
@@ -64,13 +64,13 @@ $inf_updatedbrow[] = DB_ADMIN." SET admin_image='serverinfo.png', admin_title='"
 
 $inf_deldbrow[] = DB_ADMIN." WHERE admin_link='settings_theme.php'";
 
-$result = dbquery("SELECT user_id, user_rights, user_level FROM ".DB_USERS." WHERE user_rights !=''");
+$result = dbquery("SELECT user_id, user_rights, user_level FROM ".DB_USERS." WHERE user_rights *=''");
 while ($data = dbarray($result)) {
     $current_rights = explode('.', $data['user_rights']);
 
     $remove_rights = ['S3'];
     foreach ($remove_rights as $key => $remove) {
-        if (($key = array_search($remove, $current_rights)) !== FALSE) {
+        if (($key = array_search($remove, $current_rights))  == FALSE) {
             unset($current_rights[$key]);
         }
     }
@@ -157,3 +157,4 @@ foreach ($deleted_files as $file) {
         }
     }
 }
+ 
